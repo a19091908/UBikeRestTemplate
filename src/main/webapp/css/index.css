@@ -1,0 +1,21 @@
+@CHARSET "utf-8";
+
+table {
+	background-color: lightgreen;
+	border: solid;
+}
+
+td, th {
+	border: solid;
+}
+
+th {
+	text-align: center;
+	font-size: 2rem;
+}
+.tName{
+	font-size: 1.9rem; 
+}
+.status_error{
+	background-color: red;
+}
