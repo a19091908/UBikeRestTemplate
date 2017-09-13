@@ -17,10 +17,17 @@
 		<form action="./UBikeCtl?action=insertUbikeNewTaipei" method="post">
 			<button type="submit">新北新增資料</button>
 		</form>
+		<form action="./UBikeCtl?action=updateUbikeNewTaipei" method="post">
+			<button type="submit">新北更新資料</button>
+		</form>
+
 	</div>
 	<div>
 		<form action="./UBikeCtl?action=insertUbikeTaipei" method="post">
 			<button type="submit">台北新增資料</button>
+		</form>
+				<form action="./UBikeCtl?action=updateUbikeTaipei" method="post">
+			<button type="submit">台北更新資料</button>
 		</form>
 	</div>
 	<hr>

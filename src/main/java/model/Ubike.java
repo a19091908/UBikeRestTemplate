@@ -2,15 +2,17 @@ package model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.Date;
 
+import com.vividsolutions.jts.geom.Point;
+
+import java.util.Date;
 
 /**
  * The persistent class for the ubike database table.
  * 
  */
 @Entity
-@NamedQuery(name="Ubike.findAll", query="SELECT u FROM Ubike u")
+@NamedQuery(name = "Ubike.findAll", query = "SELECT u FROM Ubike u")
 public class Ubike implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -25,12 +27,10 @@ public class Ubike implements Serializable {
 
 	private Integer bemp;
 
-	private double lat;
-
-	private double lng;
-
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date mday;
+	@Column(name="poi",columnDefinition = "POINT")
+	private Point poi;
 
 	private String sarea;
 
@@ -87,28 +87,20 @@ public class Ubike implements Serializable {
 		this.bemp = bemp;
 	}
 
-	public double getLat() {
-		return this.lat;
-	}
-
-	public void setLat(double lat) {
-		this.lat = lat;
-	}
-
-	public double getLng() {
-		return this.lng;
-	}
-
-	public void setLng(double lng) {
-		this.lng = lng;
-	}
-
 	public Date getMday() {
 		return this.mday;
 	}
 
 	public void setMday(Date mday) {
 		this.mday = mday;
+	}
+
+	public Point getPoi() {
+		return this.poi;
+	}
+
+	public void setPoi(Point poi) {
+		this.poi = poi;
 	}
 
 	public String getSarea() {
