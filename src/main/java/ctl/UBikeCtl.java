@@ -22,6 +22,10 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.TrustStrategy;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
@@ -48,30 +52,8 @@ public class UBikeCtl extends HttpServlet {
 
 	private String page = "index.jsp";
 	private String url = null;
-	private static RestTemplate restTemplate = null;
-
-	// 允許要存取的URL可以被存取
-	static {
-		TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
-
-		SSLContext sslContext = null;
-		try {
-			sslContext = org.apache.http.ssl.SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy)
-					.build();
-		} catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
-			e.printStackTrace();
-		}
-
-		SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext);
-
-		CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(csf).build();
-
-		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-
-		requestFactory.setHttpClient(httpClient);
-
-		restTemplate = new RestTemplate(requestFactory);
-	}
+	private static RestTemplate restTemplate = new RestTemplate();
+	HttpHeaders httpHeaders = new HttpHeaders();
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -116,11 +98,17 @@ public class UBikeCtl extends HttpServlet {
 		List<Ubike> uBikeList = new ArrayList<Ubike>();
 		GeometryFactory factory = new GeometryFactory();
 
+		//設定表頭瀏覽器使存取URL成功
+		httpHeaders.set("User-Agent", "Chrome/60.0.3112.113");
+		HttpEntity<String> entity = new HttpEntity<String>(httpHeaders);
+
 		// 設定新北市UBike的URL
 		url = "http://data.ntpc.gov.tw/api/v1/rest/datastore/382000000A-000352-001";
 
-		// 使用restTemplate抓取Json資料
-		String jsonString = restTemplate.getForObject(url, String.class);
+		// 使用restTemplate取得response
+		// 並取得其body內容
+		ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+		String jsonString = responseEntity.getBody();
 
 		// 設定JSON給定的日期格式
 		// 並讓null的Integer,double變成0
